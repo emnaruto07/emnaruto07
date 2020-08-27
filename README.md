@@ -5,7 +5,7 @@
 
 - 🌱 I’m currently learning **Go, python,react.js and Machine learning**
 
-- 💬 Ask me about **Fashion**
+- 💬 Ask me about **Cyber Security**
 
 - 📫 How to reach me **shaz3b01@protonmail.com**
 
