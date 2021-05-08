@@ -5,7 +5,7 @@
 
 
 
-- 🌱 I’m currently learning **Go**
+- 🌱 I’m currently learning **Go**, **C++**
 
 - 💬 Ask me about **Cyber Security**
 
