@@ -7,7 +7,7 @@
 
 - 🔭 I’m currently working on **Pwnremote**
 
-- 🌱 I’m currently learning **Django, rubyonrails and react.js**
+- 🌱 I’m currently learning **Django, Go**
 
 - 💬 Ask me about **Cyber Security**
 
